@@ -10,6 +10,11 @@
         The module includes various assets such as xml/JavaScript, XML, and SCSS files that define
         the behavior and appearance of the datetime filter items and control panel.
         The tool depends on the web module and is installable, but it is not an application by itself and does not auto-install.
+
+        [Optional]: in context action, you can use the following code to add the datetime filter settings:
+        <field name="context">{default_dt_field: 'sign_date', search_by_field_date: ['sign_date', 'start_date', 'end_date']}</field>
+        default_dt_field: the default datetime field to filter by
+        search_by_field_date: list of datetime fields to filter (if not specified, all datetime fields will be available)
     """,
     'depends': [],
     'assets': {
