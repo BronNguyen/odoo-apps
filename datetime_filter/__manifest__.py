@@ -25,6 +25,9 @@
             'datetime_filter/static/src/js/utils.js',
         ],
     },
+    'images': [
+        'static/description/datetime_panel.jpg',
+    ],
     'data': [],
     'installable': True,
     'application': False,
