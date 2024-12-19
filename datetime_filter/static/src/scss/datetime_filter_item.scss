@@ -1,0 +1,97 @@
+.dt-filter {
+    padding: 0 5px 0 0;
+    display: flex;
+
+    .dt-search-input {
+        display: flex;
+        width: auto;
+    }
+
+    .dt-buttons {
+        display: flex;
+    }
+
+    select {
+        width: -webkit-fill-available;
+        background: $o-brand-primary;
+        color: var(--SearchBar-facet-color, #{$o-white});
+        text-align: center;
+        margin-right: 2px;
+        border-radius: 0.25rem;
+        option {
+            color: black;
+        }
+    }
+    button {
+        width: 10%;
+    }
+    input {
+        height: 100%;
+        box-shadow: 0 0 0 9999px var(--table-accent-bg);
+        border: 1px solid var(--border-color, #d8dadd);
+        border-radius: 0.25rem;
+        margin-right: 2px;
+        padding-left: 5px;
+    }
+    span {
+        display: none;
+    }
+    * {
+        border: none;
+    }
+    .o_datepicker {
+        input {
+            text-align: center;
+        }
+    }
+    i {
+        padding-top: 40%;
+    }
+
+    .btn {
+        &.btn-secondary {
+            margin-left: 2px;
+        }
+
+        &.eraser {
+            padding-top: 4px;
+            margin: 0px 5px;
+            width: 40px;
+        }
+
+        &.btn-search {
+            padding-top: 4px;
+            margin: 0px 5px;
+            width: 40px;
+        }
+
+        &.arrow {
+            margin-left: 2px;
+        }
+
+        &.date-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            &.selected {
+                background-color: lightgray;
+            }
+        }
+    }
+}
+
+.o_touch_device {
+    .dt-filter {
+        flex-direction: column;
+        width: 100%;
+        .dt-search-input {
+            width: 100%;
+            max-height: 32px;
+        }
+        .dt-buttons {
+            width: 100%;
+            margin-top: 2px;
+        }
+    }
+}
