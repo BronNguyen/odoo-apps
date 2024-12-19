@@ -41,11 +41,11 @@
                     <div class="btn eraser"><i class="fa fa-eraser fa-fw" t-on-click="onErase"></i></div>
                 </div>
                 <div class="dt-buttons">
-                    <div class="btn btn-primary arrow"><i class="fa fa-arrow-left" t-on-click="moveLeft"></i></div>
+                    <div class="btn btn-primary arrow"><i class="fa fa-arrow-left" t-on-click="()=>this.moveLeft()"></i></div>
                     <div class="btn btn-secondary date-text" t-att-class="state.dateTimeSetting?.date_type==='day' and isSearching? 'selected': ''" t-on-click="filterOnDay">DAY</div>
                     <div class="btn btn-secondary date-text" t-att-class="state.dateTimeSetting?.date_type==='week' and isSearching? 'selected': ''" t-on-click="filterOnWeek">WEEK</div>
                     <div class="btn btn-secondary date-text" t-att-class="state.dateTimeSetting?.date_type==='month' and isSearching? 'selected': ''" t-on-click="filterOnMonth">MONTH</div>
-                    <div class="btn btn-primary arrow"><i class="fa fa-arrow-right" t-on-click="moveRight"></i></div>
+                    <div class="btn btn-primary arrow"><i class="fa fa-arrow-right" t-on-click="()=>this.moveRight()"></i></div>
                 </div>
             </div>
         </t>
