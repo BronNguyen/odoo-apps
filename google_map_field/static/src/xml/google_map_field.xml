@@ -14,20 +14,18 @@
             />
         </xpath>
         <xpath expr="//t[@t-else='']" position="after">
-            <t t-if="!props.readonly and state.googleMapLoaded">
-                <div t-att-class="shouldHideGoogleMapField ? 'display-none': ''">
-                    <img class="o_google_map_pin" src="/google_map_field/static/img/google_map_pin_icon.png" t-ref="map_pin_ref" />
-                    <div role="map-dialog" class="map-modal-dialog" t-ref="map_popup_ref">
-                        <div class="backdrop"></div>
-                        <div class="popup popup-med">
-                            <main class="body">
-                                <input t-ref="input2" style="width: 100%; margin-bottom: 5px;"/>
-                                <div t-ref="geomap_ref" style="width: 100%; height: 100%"></div>
-                            </main>
-                        </div>
+            <div>
+                <img class="o_google_map_pin" src="/google_map_field/static/img/google_map_pin_icon.png" t-ref="map_pin_ref" />
+                <div role="map-dialog" class="map-modal-dialog" t-ref="map_popup_ref">
+                    <div class="backdrop"></div>
+                    <div class="popup popup-med">
+                        <main class="body">
+                            <input t-ref="input2" style="width: 100%; margin-bottom: 5px;"/>
+                            <div t-ref="geomap_ref" style="width: 100%; height: 100%"></div>
+                        </main>
                     </div>
                 </div>
-            </t>
+            </div>
         </xpath>
     </t>
 </templates>

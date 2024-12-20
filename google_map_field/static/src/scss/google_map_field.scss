@@ -1,3 +1,7 @@
+.o_field_google_map_field {
+    display: flex;
+}
+
 .o_google_map_pin {
     width: 21px;
     height: 21px;
@@ -66,7 +70,7 @@
 
         &.popup-med {
             height: 70vh;
-            max-width: 40vw;
+            max-width: 40vw; 
             .body {
                 width: 100%;
                 height: calc(100% - 40px);

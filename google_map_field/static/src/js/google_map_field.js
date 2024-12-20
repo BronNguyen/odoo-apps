@@ -7,38 +7,27 @@ import { MapRenderer } from "@web_map/map_view/map_renderer";
 import { useService } from "@web/core/utils/hooks";
 import { loadJS } from "@web/core/assets";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-import { archParseBoolean } from "@web/views/utils";
-
-const GOOGLE_MAP_URL = "https://maps.googleapis.com/maps/api/js?libraries=places,geocoding&key=";
-
+import { GOOGLE_MAP_URL } from "./config";
 const { useRef, useEffect, useState, onMounted, onWillStart, onWillUnmount } = owl;
+import { _t } from "@web/core/l10n/translation";
 
 export class GoogleMapField extends CharField {
-    static template = "social_twitter.TwitterUsersAutocompleteField";
-
     static template = "google_map_field.GoogleMapField";
     static components = { ...CharField.components, MapRenderer };
-    static defaultProps = { shouldHide: "[]" };
     static props = {
         ...standardFieldProps,
         autocomplete: { type: String, optional: true },
         isPassword: { type: Boolean, optional: true },
         placeholder: { type: String, optional: true },
         dynamicPlaceholder: { type: Boolean, optional: true },
-        shouldTrim: { type: Boolean, optional: true },
-        maxLength: { type: Number, optional: true },
-        isTranslatable: { type: Boolean, optional: true },
-        shouldHide: { type: String, optional: true },
     };
 
     setup() {
-        debugger;
         super.setup();
         this.mapPinRef = useRef("map_pin_ref");
         this.mapPopupRef = useRef("map_popup_ref");
         this.mapRef = useRef("geomap_ref");
         this.inputRef = useRef("input");
-        this.input2Ref = useRef("input2");
         this.notificationService = useService("notification");
         this.orm = useService("orm");
         this.state = useState({
@@ -48,7 +37,7 @@ export class GoogleMapField extends CharField {
             googleMapLoaded: true,
         });
 
-        this.autoComplete = !this.hideGoogleMapField;
+        // this.autoComplete = !this.hideGoogleMapField;
 
         useEffect(
             (ref) => {
@@ -56,7 +45,6 @@ export class GoogleMapField extends CharField {
 
                 function toggleMap(event) {
                     const pinEl = this.mapPinRef.el;
-                    const input2El = this.input2Ref.el;
                     const { el } = this.mapRef;
                     const { target } = event;
 
@@ -87,11 +75,16 @@ export class GoogleMapField extends CharField {
     async loadGoogleMapLib() {
         try {
             const api = await this.orm.call("google.api.key.manager", "get_google_api_key", []);
-            await loadJS(`${GOOGLE_MAP_URL}${api}`);
+            if (typeof google !== "undefined" && google.maps) {
+                console.log("Google Maps library is already loaded");
+            } else {
+                console.log("Google Maps library is not loaded, loading now...");
+                await loadJS(`${GOOGLE_MAP_URL}${api}`);
+            }
             this.geocoder = new google.maps.Geocoder();
         } catch (error) {
             this.state.googleMapLoaded = false;
-            this.notificationService.add(this.env._t("Failed Loading Google Map API."), {
+            this.notificationService.add(_t("Failed Loading Google Map API."), {
                 title: this.env._t("Loading Google Map Error"),
                 sticky: true,
             });
@@ -104,23 +97,23 @@ export class GoogleMapField extends CharField {
     }
 
     get hideGoogleMapField() {
-        const hideArray = this.props.shouldHide.replaceAll("'", "").slice(1, -1).split(", ");
-        if (hideArray?.length === 3) {
-            try {
-                const [field_name, op, condition] = hideArray;
-                const operator = op === "=" ? "===" : "!=" ? "!==" : op;
-                const result = eval(
-                    `"${this.props.record.data[field_name]}"${operator}"${condition}"`
-                );
+        // const hideArray = this.props.shouldHide.replaceAll("'", "").slice(1, -1).split(", ");
+        // if (hideArray?.length === 3) {
+        //     try {
+        //         const [field_name, op, condition] = hideArray;
+        //         const operator = op === "=" ? "===" : "!=" ? "!==" : op;
+        //         const result = eval(
+        //             `"${this.props.record.data[field_name]}"${operator}"${condition}"`
+        //         );
 
-                return result;
-            } catch (error) {
-                this.notificationService.add(this.env._t(error), {
-                    title: this.env._t("An error occurred:"),
-                    sticky: true,
-                });
-            }
-        }
+        //         return result;
+        //     } catch (error) {
+        //         this.notificationService.add(this.env._t(error), {
+        //             title: this.env._t("An error occurred:"),
+        //             sticky: true,
+        //         });
+        //     }
+        // }
 
         return false;
     }
@@ -135,8 +128,6 @@ export class GoogleMapField extends CharField {
     }
 
     initMap() {
-        if (!this.inputRef.el || !this.input2Ref.el) return;
-
         const center = new google.maps.LatLng(this.state.lat, this.state.long);
         const myOptions = {
             zoom: 14,
@@ -170,7 +161,6 @@ export class GoogleMapField extends CharField {
             });
         };
         if (this.inputRef.el) setElementAutocomplete(this.inputRef.el);
-        if (this.input2Ref.el) setElementAutocomplete(this.input2Ref.el);
     }
 
     toggleAutocomplete(shouldHide) {
@@ -185,7 +175,6 @@ export class GoogleMapField extends CharField {
 
     removeAutocomplete() {
         if (this.inputRef?.el) google.maps.event.clearInstanceListeners(this.inputRef.el);
-        if (this.input2Ref?.el) google.maps.event.clearInstanceListeners(this.input2Ref.el);
     }
 
     initMarkerAndInfoWindow() {
@@ -265,17 +254,9 @@ export class GoogleMapField extends CharField {
     }
 }
 
-GoogleMapField.extractProps = ({ attrs, field }) => {
-    return {
-        shouldTrim: field.trim && !archParseBoolean(attrs.password), // passwords shouldn't be trimmed
-        maxLength: field.size,
-        isTranslatable: field.translate,
-        dynamicPlaceholder: attrs.options.dynamic_placeholder,
-        autocomplete: attrs.autocomplete,
-        isPassword: archParseBoolean(attrs.password),
-        placeholder: attrs.placeholder,
-        shouldHide: attrs.hide_google_map_field,
-    };
+export const googleMapField = {
+    ...CharField,
+    component: GoogleMapField,
 };
 
-registry.category("fields").add("google_map_field", GoogleMapField);
+registry.category("fields").add("google_map_field", googleMapField);

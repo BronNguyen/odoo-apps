@@ -10,11 +10,15 @@
     Instead of manually entering the address, users can select it from Google Maps. 
     Note that the Google Maps API must be installed in res_company.
     """,
+    'data': [
+        'security/ir.model.access.csv',
+    ],
     'assets': {
         "web.assets_backend": [
             "google_map_field/static/src/xml/google_map_field.xml",
             "google_map_field/static/src/scss/google_map_field.scss",
-            "google_map_field/static/src/js/google_map_field.js"
+            "google_map_field/static/src/js/google_map_field.js",
+            "google_map_field/static/src/js/config.js"
         ],
     },
     'qweb': [
