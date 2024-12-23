@@ -70,7 +70,7 @@
 
         &.popup-med {
             height: 70vh;
-            max-width: 40vw; 
+            max-width: 40vw;
             .body {
                 width: 100%;
                 height: calc(100% - 40px);
@@ -90,4 +90,110 @@
         padding: 0;
         overflow: auto;
     }
+}
+
+/* General styling for the backdrop */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Container for the popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Medium size variant */
+.popup-med {
+    width: 400px;
+}
+
+/* Popup header */
+.popup-header {
+    background: #f4f4f4;
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.popup-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Popup body */
+.popup-body {
+    text-align: justify;
+    padding: 20px;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.api-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Popup footer */
+.popup-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+/* Save button */
+.btn-save {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-save:hover {
+    background-color: #45a049;
+}
+
+/* Cancel button */
+.btn-cancel {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+    background-color: #e53935;
 }

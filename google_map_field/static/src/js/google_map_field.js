@@ -28,6 +28,7 @@ export class GoogleMapField extends CharField {
         this.mapPopupRef = useRef("map_popup_ref");
         this.mapRef = useRef("geomap_ref");
         this.inputRef = useRef("input");
+        this.apiInputRef = useRef("api_input");
         this.notificationService = useService("notification");
         this.orm = useService("orm");
         this.state = useState({
@@ -53,11 +54,6 @@ export class GoogleMapField extends CharField {
                         this.state.isShowing = true;
                         return;
                     }
-
-                    if (!el?.contains(target) && target !== input2El) {
-                        this.mapPopupRef.el?.classList.remove("active");
-                        this.state.isShowing = false;
-                    }
                 }
 
                 document.addEventListener("click", toggleMap.bind(this));
@@ -72,9 +68,35 @@ export class GoogleMapField extends CharField {
         onWillUnmount(() => this.removeMapEvents());
     }
 
+    showApiInput() {
+        this.state.isShowingApiInput = true;
+    }
+
+    saveApiKey(event) {
+        event.preventDefault();
+        const apiKey = this.inputRef.el.value;
+        localStorage.setItem("google_map_api_key", apiKey);
+        this.state.isShowingApiInput = false;
+    }
+
+    closePopup() {
+        event.preventDefault();
+        this.state.isShowingApiInput = false;
+    }
+
     async loadGoogleMapLib() {
         try {
-            const api = await this.orm.call("google.api.key.manager", "get_google_api_key", []);
+            // get api here
+
+            // const api = await this.orm.call("google.api.key.manager", "get_google_api_key", []);
+            const api = false;
+
+            // const api = "AIzaSyBq9wqQwjTkWfdGUY30YYFlmW3GFXHQdC4"
+            if (!api) {
+                this.showApiInput();
+            }
+            localStorage.setItem("google_map_api_key", api);
+            //
             if (typeof google !== "undefined" && google.maps) {
                 console.log("Google Maps library is already loaded");
             } else {

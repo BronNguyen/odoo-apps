@@ -12,6 +12,27 @@
                 t-att-placeholder="props.placeholder"
                 t-ref="input"
             />
+            <div t-if="state.isShowingApiInput" class="popup-overlay">
+                <div class="backdrop"></div>
+                <div class="popup popup-med">
+                    <div class="popup-header">
+                        <h2>Enter API Key</h2>
+                    </div>
+                    <div class="popup-body">
+                        <p>Please enter your Google Maps API key below. This key will be stored securely in the system parameters and local storage, ensuring it is available whenever needed. Rest assured, your key will not be exposed or shared.</p>
+                        <input
+                            type="text"
+                            placeholder="Enter your API key"
+                            class="api-input"
+                            t-ref="api_input"
+                        />
+                    </div>
+                    <div class="popup-footer">
+                        <button t-on-click="saveApiKey" class="btn-save">Save</button>
+                        <button t-on-click="closePopup" class="btn-cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
         </xpath>
         <xpath expr="//t[@t-else='']" position="after">
             <div>
