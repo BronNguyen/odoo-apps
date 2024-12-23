@@ -19,7 +19,7 @@ export async function loadGoogleMapLibWithApi(api) {
             console.log("Google Maps library is not loaded, loading now...");
             await loadJS(`${GOOGLE_MAP_URL}${api}`);
         }
-        // this.geocoder = new google.maps.Geocoder();
+
         return true;
     } catch (error) {
         console.error("Failed Loading Google Map API.", error);

@@ -7,8 +7,9 @@ import { MapRenderer } from "@web_map/map_view/map_renderer";
 import { useService } from "@web/core/utils/hooks";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { loadGoogleMapLibWithApi } from "./google_api_services";
-const { useRef, useEffect, useState, onMounted, onWillStart, onWillUnmount } = owl;
 import { _t } from "@web/core/l10n/translation";
+
+const { useRef, useEffect, useState, onMounted, onWillStart, onWillUnmount } = owl;
 
 export class GoogleMapField extends CharField {
     static template = "google_map_field.GoogleMapField";
@@ -19,6 +20,8 @@ export class GoogleMapField extends CharField {
         isPassword: { type: Boolean, optional: true },
         placeholder: { type: String, optional: true },
         dynamicPlaceholder: { type: Boolean, optional: true },
+        default_lt: { type: Number, optional: true },
+        default_lg: { type: Number, optional: true },
     };
 
     setup() {
@@ -31,10 +34,12 @@ export class GoogleMapField extends CharField {
         this.apiInputRef = useRef("api_input");
         this.notificationService = useService("notification");
         this.orm = useService("orm");
+        const { default_lt: lat, default_lg: long } = this.props;
+
         this.state = useState({
             isGeoMapShowing: false,
-            lat: 10.8231,
-            long: 106.6297,
+            lat: lat || 10.8231,
+            long: long || 106.6297,
         });
 
         useEffect(
@@ -211,7 +216,7 @@ export class GoogleMapField extends CharField {
 
             return autocomplete.addListener("place_changed", () => {
                 const place = autocomplete.getPlace();
-                console.log('place: ', place)
+                console.log("place: ", place);
                 this.handleInputAddressChanged(place?.formatted_address);
             });
         };
@@ -264,7 +269,7 @@ export class GoogleMapField extends CharField {
 
     handleInputAddressChanged(address) {
         if (!address) return;
-        console.log('address: ', address)
+        console.log("address: ", address);
 
         this.geocoder.geocode({ address }, (results, status) => {
             if (status !== google.maps.GeocoderStatus.OK) return;
@@ -321,6 +326,10 @@ export class GoogleMapField extends CharField {
 export const googleMapField = {
     ...CharField,
     component: GoogleMapField,
+    extractProps: ({ attrs, options }) => ({
+        default_lt: options.default_lt,
+        default_lg: options.default_lg,
+    }),
 };
 
 registry.category("fields").add("google_map_field", googleMapField);
