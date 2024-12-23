@@ -2,6 +2,7 @@
 <templates xml:space="preserve">
     <t t-name="google_map_field.GoogleMapField" t-inherit="web.CharField"  t-inherit-mode="primary" owl="1">
         <xpath expr="//input" position="replace">
+            <!-- input section -->
             <input
                 class="o_input o_google_map_field"
                 t-att-class="{'o_field_translate': props.isTranslatable}"
@@ -12,6 +13,7 @@
                 t-att-placeholder="props.placeholder"
                 t-ref="input"
             />
+            <!-- api input section -->
             <div t-if="state.isShowingApiInput" class="popup-overlay">
                 <div class="backdrop"></div>
                 <div class="popup popup-med">
@@ -41,7 +43,7 @@
                     <div class="backdrop"></div>
                     <div class="popup popup-med">
                         <main class="body">
-                            <input t-ref="input2" style="width: 100%; margin-bottom: 5px;"/>
+                            <input t-ref="map_address_input" style="width: 100%; margin-bottom: 5px;"/>
                             <div t-ref="geomap_ref" style="width: 100%; height: 100%"></div>
                         </main>
                     </div>

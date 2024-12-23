@@ -27,30 +27,34 @@ export class GoogleMapField extends CharField {
         this.mapPopupRef = useRef("map_popup_ref");
         this.mapRef = useRef("geomap_ref");
         this.inputRef = useRef("input");
+        this.mapAddressInputRef = useRef("map_address_input");
         this.apiInputRef = useRef("api_input");
         this.notificationService = useService("notification");
         this.orm = useService("orm");
         this.state = useState({
-            isShowing: false,
+            isGeoMapShowing: false,
             lat: 10.8231,
             long: 106.6297,
         });
 
-        // this.autoComplete = !this.hideGoogleMapField;
-
         useEffect(
             (ref) => {
                 if (!ref) return;
-
                 function toggleMap(event) {
                     const pinEl = this.mapPinRef.el;
+                    const mapAddressInputEl = this.mapAddressInputRef.el;
                     const { el } = this.mapRef;
                     const { target } = event;
 
-                    if (!this.state.isShowing && target === pinEl) {
+                    if (!this.state.isGeoMapShowing && target === pinEl) {
                         this.mapPopupRef.el.classList.add("active");
-                        this.state.isShowing = true;
+                        this.state.isGeoMapShowing = true;
                         return;
+                    }
+
+                    if (!el?.contains(target) && target !== mapAddressInputEl) {
+                        this.mapPopupRef.el?.classList.remove("active");
+                        this.state.isGeoMapShowing = false;
                     }
                 }
 
@@ -66,8 +70,7 @@ export class GoogleMapField extends CharField {
         onMounted(() => {
             if (!this.googleMapLoaded) return;
 
-            this.geocoder = new google.maps.Geocoder();
-            this.initAutocomplete();
+            this.initMapComponents();
         });
 
         onWillUnmount(() => {
@@ -116,10 +119,10 @@ export class GoogleMapField extends CharField {
 
     ensureGoogleMapLibLoaded() {
         if (typeof google !== "undefined" && google.maps) {
-            console.log("Google Maps library is already loaded");
+            console.info("Google Maps library is already loaded");
             this.googleMapLoaded = true;
         } else {
-            console.log("Google Maps library is not loaded, loading now...");
+            console.info("Google Maps library is not loaded, loading now...");
             this.loadGoogleMapLib();
         }
     }
@@ -155,7 +158,6 @@ export class GoogleMapField extends CharField {
                 title: _t("Google Map API loaded"),
                 type: "success",
             });
-
         } catch (error) {
             this.googleMapLoaded = false;
             this.notificationService.add(_t("Failed Loading Google Map API."), {
@@ -164,33 +166,6 @@ export class GoogleMapField extends CharField {
                 sticky: true,
             });
         }
-    }
-
-    get shouldHideGoogleMapField() {
-        const shouldHide = this.hideGoogleMapField;
-        return this.toggleAutocomplete(shouldHide);
-    }
-
-    get hideGoogleMapField() {
-        // const hideArray = this.props.shouldHide.replaceAll("'", "").slice(1, -1).split(", ");
-        // if (hideArray?.length === 3) {
-        //     try {
-        //         const [field_name, op, condition] = hideArray;
-        //         const operator = op === "=" ? "===" : "!=" ? "!==" : op;
-        //         const result = eval(
-        //             `"${this.props.record.data[field_name]}"${operator}"${condition}"`
-        //         );
-
-        //         return result;
-        //     } catch (error) {
-        //         this.notificationService.add(_t(error), {
-        //             title: _t("An error occurred:"),
-        //             sticky: true,
-        //         });
-        //     }
-        // }
-
-        return false;
     }
 
     initMapComponents() {
@@ -203,6 +178,9 @@ export class GoogleMapField extends CharField {
     }
 
     initMap() {
+        if (!this.inputRef.el || !this.mapAddressInputRef.el) return;
+
+        this.geocoder = new google.maps.Geocoder();
         const center = new google.maps.LatLng(this.state.lat, this.state.long);
         const myOptions = {
             zoom: 14,
@@ -214,14 +192,15 @@ export class GoogleMapField extends CharField {
 
     initAutocomplete() {
         if (!this.map) this.initMap();
-        if (!this.autoComplete) return;
 
         const setElementAutocomplete = (element) => {
             element.setAttribute("autocomplete", "off");
             const autocomplete = new google.maps.places.Autocomplete(element, {
                 types: ["geocode"],
             });
+
             autocomplete.bindTo("bounds", this.map);
+
             autocomplete.setFields([
                 "address_component",
                 "geometry",
@@ -232,20 +211,12 @@ export class GoogleMapField extends CharField {
 
             return autocomplete.addListener("place_changed", () => {
                 const place = autocomplete.getPlace();
+                console.log('place: ', place)
                 this.handleInputAddressChanged(place?.formatted_address);
             });
         };
         if (this.inputRef.el) setElementAutocomplete(this.inputRef.el);
-    }
-
-    toggleAutocomplete(shouldHide) {
-        if (shouldHide) {
-            this.removeAutocomplete();
-        } else {
-            this.initAutocomplete();
-        }
-
-        return shouldHide;
+        if (this.mapAddressInputRef.el) setElementAutocomplete(this.mapAddressInputRef.el);
     }
 
     removeAutocomplete() {
@@ -270,6 +241,7 @@ export class GoogleMapField extends CharField {
             this.updateAddressFromLocation(this.marker.getPosition());
             this.updateStatePosition();
         });
+
         google.maps.event.addListener(this.marker, "click", () => {
             this.infoWindow.setContent(this.marker.formatted_address || "");
             this.infoWindow.open(this.map, this.marker);
@@ -291,7 +263,8 @@ export class GoogleMapField extends CharField {
     }
 
     handleInputAddressChanged(address) {
-        if (!address || !this.autoComplete) return;
+        if (!address) return;
+        console.log('address: ', address)
 
         this.geocoder.geocode({ address }, (results, status) => {
             if (status !== google.maps.GeocoderStatus.OK) return;
@@ -317,15 +290,31 @@ export class GoogleMapField extends CharField {
     updateStatePosition() {
         this.state.lat = this.marker?.position.lat();
         this.state.long = this.marker?.position.lng();
+        this.map.setCenter({ lat: this.state.lat, lng: this.state.long });
     }
 
-    updateCurrentAddress(formatted_address) {
-        this.props.update(formatted_address);
+    async updateCurrentAddress(formatted_address) {
+        this.props.record.data[this.props.name] = formatted_address;
+        await this.updateAddressFieldValue(formatted_address);
+
         if (!this.marker) return;
 
         this.marker.formatted_address = formatted_address;
         this.infoWindow.setContent(formatted_address);
         this.infoWindow.open(this.map, this.marker);
+    }
+
+    /**
+     * This function is very important as it updates the address field value
+     * in the record and ensures the changes are saved.
+     *
+     * @param {string} value - The new value to be set for the address field.
+     * @returns {Promise} - A promise that resolves when the record is saved.
+     */
+    async updateAddressFieldValue(value) {
+        const record = this.props.record;
+        await record.update({ [this.props.name]: value });
+        return record.save();
     }
 }
 
