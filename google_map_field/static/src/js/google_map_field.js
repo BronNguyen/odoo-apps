@@ -5,9 +5,8 @@ import { registry } from "@web/core/registry";
 import { CharField } from "@web/views/fields/char/char_field";
 import { MapRenderer } from "@web_map/map_view/map_renderer";
 import { useService } from "@web/core/utils/hooks";
-import { loadJS } from "@web/core/assets";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-import { GOOGLE_MAP_URL } from "./config";
+import { loadGoogleMapLibWithApi } from "./google_api_services";
 const { useRef, useEffect, useState, onMounted, onWillStart, onWillUnmount } = owl;
 import { _t } from "@web/core/l10n/translation";
 
@@ -35,7 +34,6 @@ export class GoogleMapField extends CharField {
             isShowing: false,
             lat: 10.8231,
             long: 106.6297,
-            googleMapLoaded: true,
         });
 
         // this.autoComplete = !this.hideGoogleMapField;
@@ -63,51 +61,106 @@ export class GoogleMapField extends CharField {
             },
             () => [this.mapPinRef]
         );
-        onWillStart(() => this.loadGoogleMapLib());
-        onMounted(() => this.initAutocomplete());
-        onWillUnmount(() => this.removeMapEvents());
+
+        onWillStart(() => this.ensureGoogleMapLibLoaded());
+        onMounted(() => {
+            if (!this.googleMapLoaded) return;
+
+            this.geocoder = new google.maps.Geocoder();
+            this.initAutocomplete();
+        });
+
+        onWillUnmount(() => {
+            if (!this.googleMapLoaded) return;
+
+            this.removeMapEvents();
+        });
     }
 
     showApiInput() {
         this.state.isShowingApiInput = true;
     }
 
-    saveApiKey(event) {
-        event.preventDefault();
-        const apiKey = this.inputRef.el.value;
-        localStorage.setItem("google_map_api_key", apiKey);
+    hideApiInput() {
         this.state.isShowingApiInput = false;
     }
 
-    closePopup() {
+    inputApiKey(event) {
         event.preventDefault();
-        this.state.isShowingApiInput = false;
+        this.apiKey = this.apiInputRef.el.value;
+        this.hideApiInput();
+
+        // reload google map lib after input api key
+        this.loadGoogleMapLib();
+    }
+
+    saveApiKey() {
+        localStorage.setItem("google_map_api_key", this.apiKey);
+        try {
+            this.orm.call("google.api.key.manager", "set_google_api_key", [this.apiKey]);
+        } catch (error) {
+            this.notificationService.add(
+                _t("Could not save Google Map API key in System Parameters"),
+                {
+                    title: _t("API KEY not saved!"),
+                    sticky: true,
+                }
+            );
+        }
+    }
+
+    closePopup(event) {
+        event.preventDefault();
+        this.hideApiInput();
+    }
+
+    ensureGoogleMapLibLoaded() {
+        if (typeof google !== "undefined" && google.maps) {
+            console.log("Google Maps library is already loaded");
+            this.googleMapLoaded = true;
+        } else {
+            console.log("Google Maps library is not loaded, loading now...");
+            this.loadGoogleMapLib();
+        }
+    }
+
+    async getGoogleMapApiKey() {
+        try {
+            const apiKey = await this.orm.call("google.api.key.manager", "get_google_api_key", []);
+            if (!apiKey) throw new Error("No GoogleMap API Key found");
+
+            return apiKey;
+        } catch (error) {
+            this.showApiInput();
+            this.notificationService.add(
+                _t("Could not found Google Map API key in System Parameters"),
+                {
+                    title: _t("API KEY not found!"),
+                    sticky: true,
+                }
+            );
+            return false;
+        }
     }
 
     async loadGoogleMapLib() {
         try {
-            // get api here
+            if (!this.apiKey) this.apiKey = await this.getGoogleMapApiKey();
+            if (!this.apiKey) return;
 
-            // const api = await this.orm.call("google.api.key.manager", "get_google_api_key", []);
-            const api = false;
+            await loadGoogleMapLibWithApi(this.apiKey);
+            this.saveApiKey();
+            this.googleMapLoaded = true;
+            this.notificationService.add(_t("Google Map API loaded successfully."), {
+                title: _t("Google Map API loaded"),
+                type: "success",
+            });
 
-            // const api = "AIzaSyBq9wqQwjTkWfdGUY30YYFlmW3GFXHQdC4"
-            if (!api) {
-                this.showApiInput();
-            }
-            localStorage.setItem("google_map_api_key", api);
-            //
-            if (typeof google !== "undefined" && google.maps) {
-                console.log("Google Maps library is already loaded");
-            } else {
-                console.log("Google Maps library is not loaded, loading now...");
-                await loadJS(`${GOOGLE_MAP_URL}${api}`);
-            }
-            this.geocoder = new google.maps.Geocoder();
         } catch (error) {
-            this.state.googleMapLoaded = false;
+            this.googleMapLoaded = false;
             this.notificationService.add(_t("Failed Loading Google Map API."), {
-                title: this.env._t("Loading Google Map Error"),
+                title: _t("Loading Google Map Error", error),
+                type: "danger",
                 sticky: true,
             });
         }
@@ -130,8 +183,8 @@ export class GoogleMapField extends CharField {
 
         //         return result;
         //     } catch (error) {
-        //         this.notificationService.add(this.env._t(error), {
-        //             title: this.env._t("An error occurred:"),
+        //         this.notificationService.add(_t(error), {
+        //             title: _t("An error occurred:"),
         //             sticky: true,
         //         });
         //     }
@@ -141,7 +194,7 @@ export class GoogleMapField extends CharField {
     }
 
     initMapComponents() {
-        if (!this.state.googleMapLoaded) return;
+        if (!this.googleMapLoaded) return;
 
         this.initMap();
         this.initAutocomplete();
@@ -225,7 +278,7 @@ export class GoogleMapField extends CharField {
     }
 
     removeMapEvents() {
-        if (!this.state.googleMapLoaded) return;
+        if (!this.googleMapLoaded) return;
 
         this.removeAutocomplete();
         this.removeMarkers();

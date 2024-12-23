@@ -28,7 +28,7 @@
                         />
                     </div>
                     <div class="popup-footer">
-                        <button t-on-click="saveApiKey" class="btn-save">Save</button>
+                        <button t-on-click="inputApiKey" class="btn-save">Save</button>
                         <button t-on-click="closePopup" class="btn-cancel">Cancel</button>
                     </div>
                 </div>
