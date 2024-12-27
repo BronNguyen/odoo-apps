@@ -99,7 +99,7 @@ export class GoogleMapField extends CharField {
         this.hideApiInput();
 
         // reload google map lib after input api key
-        this.loadGoogleMapLib();
+        this.loadGoogleMapLib(true);
     }
 
     saveApiKey() {
@@ -150,7 +150,7 @@ export class GoogleMapField extends CharField {
         }
     }
 
-    async loadGoogleMapLib() {
+    async loadGoogleMapLib(isReload = false) {
         try {
             if (!this.apiKey) this.apiKey = await this.getGoogleMapApiKey();
             if (!this.apiKey) return;
@@ -158,10 +158,11 @@ export class GoogleMapField extends CharField {
             await loadGoogleMapLibWithApi(this.apiKey);
             this.saveApiKey();
             this.googleMapLoaded = true;
-            this.notificationService.add(_t("Google Map API loaded successfully."), {
-                title: _t("Google Map API loaded"),
-                type: "success",
-            });
+            if (isReload)
+                this.notificationService.add(_t("Google Map API loaded successfully."), {
+                    title: _t("Google Map API loaded, please reload the page."),
+                    type: "success",
+                });
         } catch (error) {
             this.googleMapLoaded = false;
             this.notificationService.add(_t("Failed Loading Google Map API."), {
