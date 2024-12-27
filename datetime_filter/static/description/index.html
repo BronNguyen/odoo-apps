@@ -1,121 +1,112 @@
-<section class="oe_container">
-    <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan">Datetime Filter</h2>
-        <h3 class="oe_slogan">
-            Filter your records quickly
-        </h3>
-        <div class="oe_span12">
-            <!-- <img src="the_calendar.png" class="oe_picture oe_screenshot" /> -->
-        </div>
-    </div>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DatetimeFilter App Description</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
 
-<section class="oe_container oe_dark">
-    <div class="oe_row">
-        <h2 class="oe_slogan">Keep an eye on your records</h2>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                See easily the purpose of the meeting, the start time and also the attendee(s)...
-                All that without click on anything...
-            </p>
-        </div>
-        <div class="oe_span6">
-            <img class="oe_picture oe_screenshot" src="an_event.png" />
-        </div>
-    </div>
-</section>
+            h1 {
+                color: #333;
+            }
 
-<section class="oe_container">
-    <div class="oe_row">
-        <h2 class="oe_slogan">Create so easily an event</h2>
-        <div class="oe_span6">
-            <img class="oe_picture oe_screenshot" src="create_quick.png" />
-        </div>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                In just one click you can create an event...<br />
-                You can drag and drop your event if you want moved it to another timing.<br />
-                You can shrink or extend the event if you need to change the start's hours or the
-                duration of your meeting.
-            </p>
-        </div>
-    </div>
-</section>
+            .description {
+                margin-top: 20px;
+            }
 
-<section class="oe_container oe_dark">
-    <div class="oe_row">
-        <h2 class="oe_slogan">Create recurrent event</h2>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                You can also create recurrent events with only one event.<br />
-                You need to create an event each monday of the week ? With only one it's possible,
-                you could specify the recurrence and if one of this event is moved, or deleted, it's
-                not a problem, you can untie your event from the others recurrences.
-            </p>
-        </div>
-        <div class="oe_span6">
-            <img class="oe_picture oe_screenshot" src="recurrent.png" />
-        </div>
-    </div>
-</section>
+            .steps {
+                margin-top: 20px;
+            }
 
-<section class="oe_container">
-    <div class="oe_row">
-        <h2 class="oe_slogan">See all events you wants</h2>
-        <div class="oe_span6">
-            <img class="oe_picture oe_screenshot" src="coworker.png" />
-        </div>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                See in your calendar, the event from others peoples where your are attendee, but
-                also their events by simply adding your favorites coworkers.<br />
-                Every coworker will have their own color in your calendar, and every attendee will
-                have their avatar in the event...<br />
-            </p>
-        </div>
-    </div>
-</section>
+            .steps ol {
+                margin-left: 20px;
+            }
 
-<section class="oe_container oe_dark">
-    <div class="oe_row">
-        <h2 class="oe_slogan">Get an email</h2>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                You will receive an email at creation of an event where you are attendee, but also
-                when this event is updated for some fields as date start, ...
-            </p>
-        </div>
-        <div class="oe_span6">
-            <img class="oe_picture oe_screenshot" src="email.png" />
-        </div>
-    </div>
-</section>
+            .highlight {
+                color: #0066cc;
+                font-weight: bold;
+            }
 
-<section class="oe_container">
-    <div class="oe_row">
-        <h2 class="oe_slogan">Be notified</h2>
-        <div class="oe_span6">
-            <img class="oe_picture oe_screenshot" src="notification.png" />
-        </div>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                You can ask to have a alarm of type 'notification' in your Odoo.<br />
-                You will have a notification in you Odoo which ever the page you are.
+            .note {
+                background-color: #f9f9f9;
+                border-left: 5px solid #ffcc00;
+                padding: 10px;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>DatetimeFilter App for Odoo</h1>
+
+        <div class="description">
+            <p>
+                The <strong>DatetimeFilter</strong> app for Odoo allows you to filter records based
+                on a selected date range. This feature adds a <strong>datetime panel</strong> to the
+                control panel, where you can easily pick a date range and filter records that fall
+                within that range. This tool is particularly useful for managing records with
+                datetime fields and improving data accessibility within Odoo.
             </p>
         </div>
-    </div>
-</section>
-<section class="oe_container oe_dark">
-    <div class="oe_row">
-        <h2 class="oe_slogan">Google Calendar</h2>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                With the plugin Google_calendar, you can synchronize your Odoo calendar with Google
-                Calendar.
+
+        <div class="steps">
+            <h2>How the DatetimeFilter Works:</h2>
+            <ol>
+                <li>
+                    <strong>Datetime Panel in the Control Panel:</strong> A datetime filter panel
+                    will appear in your Odoo control panel. This panel allows you to select a start
+                    and end date, specifying the date range you want to filter records by.
+                </li>
+                <li>
+                    <strong>Select Date Range:</strong> Use the panel to choose a date range. Once
+                    you select the start and end dates, the app will filter the records and display
+                    only those that fall within the specified range.
+                </li>
+                <li>
+                    <strong>Apply Filter to Records:</strong> After selecting the date range, the
+                    app will automatically filter all relevant records that match the datetime
+                    criteria. This helps you to narrow down your results and focus on the records
+                    you need.
+                </li>
+                <img src="datetime_picker.png" class="oe_picture oe_screenshot" />
+            </ol>
+        </div>
+
+        <div class="optional-settings">
+            <h2>Optional Context Action Settings:</h2>
+            <p>
+                In context actions, you can add the following code to customize the datetime filter:
+            </p>
+            <pre>
+            <field name="context">{default_dt_field: 'sign_date', search_by_field_date: ['sign_date', 'start_date', 'end_date']}</field>
+        </pre>
+            <ul>
+                <li>
+                    <strong>default_dt_field:</strong> This is the default datetime field to filter
+                    by (e.g., <code>'sign_date'</code>).
+                </li>
+                <li>
+                    <strong>search_by_field_date:</strong> This is an optional list of datetime
+                    fields you want to use for filtering (e.g.,
+                    <code>['sign_date', 'start_date', 'end_date']</code>). If not specified, all
+                    datetime fields will be available for filtering.
+                </li>
+            </ul>
+            <p>
+                By configuring these settings, you can fine-tune how the datetime filter applies to
+                your records, ensuring it works seamlessly with your data structure.
             </p>
         </div>
-        <div class="oe_span6">
-            <img class="oe_picture oe_screenshot" src="calendar_in_action.png" />
+
+        <div class="note">
+            <p>
+                <strong>Note:</strong> Make sure the selected datetime fields are properly
+                configured in your models for the filter to work correctly. If no datetime fields
+                are provided, the filter will apply to all datetime fields available in the records.
+            </p>
         </div>
-    </div>
-</section>
+    </body>
+</html>
