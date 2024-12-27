@@ -19,7 +19,7 @@
             "google_map_field/static/src/scss/google_map_field.scss",
             "google_map_field/static/src/js/google_map_field.js",
             "google_map_field/static/src/js/google_api_services.js",
-            "google_map_field/static/src/js/config.js"
+            "google_map_field/static/src/js/config.js",
         ],
     },
     'qweb': [

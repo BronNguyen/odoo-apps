@@ -3,14 +3,6 @@
 import { GOOGLE_MAP_URL } from "./config";
 import { loadJS } from "@web/core/assets";
 
-(async function () {
-    const apiKey = localStorage.getItem("google_map_api_key");
-    if (apiKey) {
-        await loadGoogleMapLibWithApi(apiKey);
-        console.warn("Google Maps API key not found in localStorage.");
-    }
-})();
-
 export async function loadGoogleMapLibWithApi(api) {
     try {
         if (typeof google !== "undefined" && google.maps) {

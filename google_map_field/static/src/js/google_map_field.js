@@ -103,7 +103,6 @@ export class GoogleMapField extends CharField {
     }
 
     saveApiKey() {
-        localStorage.setItem("google_map_api_key", this.apiKey);
         try {
             this.orm.call("google.api.key.manager", "set_google_api_key", [this.apiKey]);
         } catch (error) {
@@ -173,12 +172,12 @@ export class GoogleMapField extends CharField {
         }
     }
 
-    initMapComponents() {
+    async initMapComponents() {
         if (!this.googleMapLoaded) return;
 
         this.initMap();
         this.initAutocomplete();
-        this.initMarkerAndInfoWindow();
+        await this.initMarkerAndInfoWindow();
         this.handleInputAddressChanged(this.inputRef.el?.value);
     }
 
@@ -191,6 +190,7 @@ export class GoogleMapField extends CharField {
             zoom: 14,
             center,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapId: "DEMO_MAP_ID",
         };
         this.map = new google.maps.Map(this.mapRef.el, myOptions);
     }
@@ -216,7 +216,6 @@ export class GoogleMapField extends CharField {
 
             return autocomplete.addListener("place_changed", () => {
                 const place = autocomplete.getPlace();
-                console.log("place: ", place);
                 this.handleInputAddressChanged(place?.formatted_address);
             });
         };
@@ -228,12 +227,14 @@ export class GoogleMapField extends CharField {
         if (this.inputRef?.el) google.maps.event.clearInstanceListeners(this.inputRef.el);
     }
 
-    initMarkerAndInfoWindow() {
+    async initMarkerAndInfoWindow() {
         const position = new google.maps.LatLng(this.state.lat, this.state.long);
-        this.marker = new google.maps.Marker({
+        const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+
+        this.marker = new AdvancedMarkerElement({
             map: this.map,
             position,
-            draggable: true,
+            gmpDraggable: true,
             title: "Position",
         });
 
@@ -242,14 +243,9 @@ export class GoogleMapField extends CharField {
             size: new google.maps.Size(150, 50),
         });
 
-        google.maps.event.addListener(this.marker, "dragend", () => {
-            this.updateAddressFromLocation(this.marker.getPosition());
-            this.updateStatePosition();
-        });
-
-        google.maps.event.addListener(this.marker, "click", () => {
-            this.infoWindow.setContent(this.marker.formatted_address || "");
-            this.infoWindow.open(this.map, this.marker);
+        this.marker.addListener("dragend", (_) => {
+            const position = this.marker.position;
+            this.updateAddressFromLocation(position);
             this.updateStatePosition();
         });
     }
@@ -258,24 +254,16 @@ export class GoogleMapField extends CharField {
         if (!this.googleMapLoaded) return;
 
         this.removeAutocomplete();
-        this.removeMarkers();
-    }
-
-    removeMarkers() {
-        if (!this.marker) return;
-        google.maps.event.clearListeners(this.marker, "dragend");
-        google.maps.event.clearListeners(this.marker, "click");
     }
 
     handleInputAddressChanged(address) {
         if (!address) return;
-        console.log("address: ", address);
 
         this.geocoder.geocode({ address }, (results, status) => {
             if (status !== google.maps.GeocoderStatus.OK) return;
 
             const { geometry, formatted_address } = results[0];
-            this.marker?.setPosition(geometry.location);
+            this.marker.position = geometry.location;
             this.updateCurrentAddress(formatted_address);
             this.updateStatePosition();
         });
@@ -293,8 +281,8 @@ export class GoogleMapField extends CharField {
     }
 
     updateStatePosition() {
-        this.state.lat = this.marker?.position.lat();
-        this.state.long = this.marker?.position.lng();
+        this.state.lat = this.marker.position.lat;
+        this.state.long = this.marker.position.lng;
         this.map.setCenter({ lat: this.state.lat, lng: this.state.long });
     }
 
@@ -309,13 +297,6 @@ export class GoogleMapField extends CharField {
         this.infoWindow.open(this.map, this.marker);
     }
 
-    /**
-     * This function is very important as it updates the address field value
-     * in the record and ensures the changes are saved.
-     *
-     * @param {string} value - The new value to be set for the address field.
-     * @returns {Promise} - A promise that resolves when the record is saved.
-     */
     async updateAddressFieldValue(value) {
         const record = this.props.record;
         await record.update({ [this.props.name]: value });
