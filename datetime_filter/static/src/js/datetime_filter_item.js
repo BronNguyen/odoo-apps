@@ -2,8 +2,7 @@
 
 import { _lt } from "@web/core/l10n/translation";
 import { useState, useRef, Component } from "@odoo/owl";
-import { DateTimeInput } from '@web/core/datetime/datetime_input';
-// import { Dropdown } from "@web/core/dropdown/dropdown";
+import { DateTimeInput } from "@web/core/datetime/datetime_input";
 import { serializeDate, serializeDateTime } from "@web/core/l10n/dates";
 const { DateTime } = luxon;
 
@@ -23,10 +22,13 @@ const DEFAULT_DATE_TIME_SETTING = {
     dateTimeDomain: [],
     isSearchingByDateTimePanel: false,
     value: [false, false],
-    field_index: 0
+    field_index: 0,
 };
 
 export class DatetimeFilterItem extends Component {
+    static template = "web_datetime_panel.DatetimeFilterItem";
+    static components = { DateTimeInput };
+
     setup() {
         this.dateFilterRef = useRef("date-filter-ref");
         const searchViewFields = this.env.searchModel?.searchViewFields;
@@ -34,8 +36,8 @@ export class DatetimeFilterItem extends Component {
 
         this.filteredDateTimeFields = [];
         const context = this.env.searchModel?._context;
-        if ('search_by_field_date' in context) {
-            this.filteredDateTimeFields.push(...context['search_by_field_date']);
+        if ("search_by_field_date" in context) {
+            this.filteredDateTimeFields.push(...context["search_by_field_date"]);
         }
 
         this.fields = Object.values(searchViewFields)
@@ -64,7 +66,9 @@ export class DatetimeFilterItem extends Component {
         const context = this.env.searchModel?._context;
         if (!("default_dt_field" in context)) return;
         const default_field_name = context["default_dt_field"];
-        const default_field_index = this.fields.findIndex((field) => field.name === default_field_name);
+        const default_field_index = this.fields.findIndex(
+            (field) => field.name === default_field_name
+        );
         if (default_field_index < 0) return;
 
         this.state.dateTimeSetting.field_index = default_field_index;
@@ -78,8 +82,13 @@ export class DatetimeFilterItem extends Component {
     _isDatetimeField(field) {
         const isManualSetting = this.filteredDateTimeFields?.length;
         const isInContext = this.filteredDateTimeFields?.includes(field.name);
-        const allowFieldDisplay = isManualSetting && isInContext || !isManualSetting;
-        return (!field.deprecated && allowFieldDisplay && field.searchable && (field.type === "datetime" || field.type === "date"));
+        const allowFieldDisplay = (isManualSetting && isInContext) || !isManualSetting;
+        return (
+            !field.deprecated &&
+            allowFieldDisplay &&
+            field.searchable &&
+            (field.type === "datetime" || field.type === "date")
+        );
     }
 
     performOperationOnDate(operation = "minus", value = 1) {
@@ -102,20 +111,33 @@ export class DatetimeFilterItem extends Component {
     }
 
     _updateWeekDate(dateTimeValue, start_date, end_date, operation, value) {
-        const week_date = operation === "minus" ? start_date.minus({ weeks: value }) : start_date.plus({ weeks: value });
+        const week_date =
+            operation === "minus"
+                ? start_date.minus({ weeks: value })
+                : start_date.plus({ weeks: value });
         dateTimeValue[0] = week_date.startOf("week");
         dateTimeValue[1] = end_date ? week_date.endOf("week") : undefined;
     }
 
     _updateMonthDate(dateTimeValue, start_date, end_date, operation, value) {
-        const month_date = operation === "minus" ? start_date.minus({ months: value }) : start_date.plus({ months: value });
+        const month_date =
+            operation === "minus"
+                ? start_date.minus({ months: value })
+                : start_date.plus({ months: value });
         dateTimeValue[0] = month_date.startOf("month");
         dateTimeValue[1] = end_date ? month_date.endOf("month") : undefined;
     }
 
     _updateDayDate(dateTimeValue, start_date, end_date, operation, value) {
-        dateTimeValue[0] = operation === "minus" ? start_date.minus({ days: value }) : start_date.plus({ days: value });
-        if (end_date) dateTimeValue[1] = operation === "minus" ? end_date.minus({ days: value }) : end_date.plus({ days: value });
+        dateTimeValue[0] =
+            operation === "minus"
+                ? start_date.minus({ days: value })
+                : start_date.plus({ days: value });
+        if (end_date)
+            dateTimeValue[1] =
+                operation === "minus"
+                    ? end_date.minus({ days: value })
+                    : end_date.plus({ days: value });
     }
 
     onDateTimeChanged(valueIndex, date) {
@@ -211,7 +233,7 @@ export class DatetimeFilterItem extends Component {
         this.env.searchModel.dateTimeSetting = {
             ...DEFAULT_DATE_TIME_SETTING,
             isSearchingByDateTimePanel: true,
-            field_index: this.state.dateTimeSetting.field_index
+            field_index: this.state.dateTimeSetting.field_index,
         };
 
         this.state.dateTimeSetting = this.env.searchModel.dateTimeSetting;
@@ -225,11 +247,16 @@ export class DatetimeFilterItem extends Component {
         const field = this.fields[this.state.dateTimeSetting.field_index];
         if (FIELD_TYPES[field.type] === "date") return;
         const dateTimeValue = [...this.state.dateTimeSetting.value];
-        dateTimeValue[0] = this.state.dateTimeSetting.value[0].set({ hour: 0, minute: 0, second: 0 });
-        dateTimeValue[1] = this.state.dateTimeSetting.value[1].set({ hour: 23, minute: 59, second: 59 });
+        dateTimeValue[0] = this.state.dateTimeSetting.value[0].set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+        });
+        dateTimeValue[1] = this.state.dateTimeSetting.value[1].set({
+            hour: 23,
+            minute: 59,
+            second: 59,
+        });
         this.state.dateTimeSetting.value = dateTimeValue;
     }
 }
-
-DatetimeFilterItem.template = "web_datetime_panel.DatetimeFilterItem";
-DatetimeFilterItem.components = { DateTimeInput };
