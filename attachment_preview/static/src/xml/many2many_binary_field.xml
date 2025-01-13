@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="attachment_preview.MultipleAttachmentPreview" owl="1">
+        <div t-attf-class="oe_fileupload {{props.className ? props.className : ''}}" aria-atomic="true">
+            <div class="o_attachments">
+                <t t-foreach="state.files" t-as="file" t-key="file_index">
+                    <t t-call="AttachmentPreviewer"/>
+                </t>
+            </div>
+            <div t-if="!props.readonly" class="oe_add">
+                <div class="dropzone" t-on-dragover.prevent="handleDragOver" t-on-dragleave.prevent="handleDragLeave" t-on-drop="handleFileDrop" t-att-style="state.isDragging? 'border: 2px dashed #ccc; padding: 40px; text-align: center;': ''">
+                    <p t-if="state.isDragging">Drag and drop files here <i class="fa fa-download"/>
+                    </p>
+                    <FileInput acceptedFileExtensions="props.acceptedFileExtensions" multiUpload="true" onUpload.bind="onFileUploaded" resModel="props.record.resModel" resId="props.record.data.id or 0">
+                        <button class="btn btn-secondary o_attach" data-tooltip="Attach">
+                            <span class="fa fa-paperclip" aria-label="Attach"/>
+                            <t t-esc="props.uploadText"/>
+                        </button>
+                    </FileInput>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="AttachmentPreviewer" owl="1">
+        <t t-set="editable" t-value="!props.readonly"/>
+        <div t-attf-class="o_attachment o_attachment_many2many #{ editable ? 'o_attachment_editable' : '' } #{upload ? 'o_attachment_uploading' : ''}" t-att-title="file.name">
+            <div t-if="file" class="o_attachment_wrap">
+                <t t-set="ext" t-value="getExtension(file)"/>
+                <div class="o_image_box" t-on-click.stop="() => this.onViewAttachment(file)" t-att-data-tooltip="'Download ' + file.name">
+                    <div class="m2m-image-container" t-att-data-id="file.id">
+                        <t t-if="isImageType(file)">
+                            <img t-attf-src="/web/content/{{ file.id }}" t-att-data-id="file.id" class="widget-image" />
+                        </t>
+                        <t t-elif="file.mimetype==='application/pdf'">
+                            <img t-attf-src="/web/static/img/mimetypes/pdf.svg" t-att-data-id="file.id" class="widget-image" />
+                        </t>
+                        <t t-else="">
+                            <img t-attf-src="/attachment_preview/static/description/file.png" t-att-data-id="file.id" class="widget-image" />
+                        </t>
+                    </div>
+                </div>
+                <span>
+                    <t t-esc="processFileName(file.name) || 'undefined'"/>
+                </span>
+                <div class="o_attachment_download" t-att-style="!editable?'right: 0': ''">
+                    <a t-att-href="getUrl(file.id)" aria-label="Download" download="">
+                        <span class="text-white" aria-label="Download" title="Download">
+                            <i class="fa fa-download"/>
+                        </span>
+                    </a>
+                </div>
+                <div t-if="editable" class="o_attachment_delete" t-on-click.stop="() => this.onFileRemove(file.id)">
+                    <span class="text-white" role="img" aria-label="Delete" title="Delete">
+                        <i class="fa fa-trash"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

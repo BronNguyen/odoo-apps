@@ -1,0 +1,139 @@
+@media (min-width: 992px) {
+    .o_attachment.o_attachment_many2many {
+        width: unset !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .o_attachment.o_attachment_many2many {
+        width: unset !important;
+    }
+}
+
+.o_attachments {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.o_attachment {
+    &.o_attachment_many2many {
+        display: flex;
+        width: unset;
+    }
+
+    &:hover {
+        .o_attachment_download {
+            transition: all 0.1s ease 0s;
+            transform: translateX(0);
+        }
+
+        .o_attachment_wrap {
+            .o_image_box {
+                .m2m-image-container {
+                    justify-content: flex-start;
+                }
+            }
+        }
+    }
+
+    &.o_attachment_uploading {
+        .o_attachment_download {
+            display: none;
+        }
+    }
+}
+
+.o_attachment {
+    position: relative;
+    width: 100%;
+    padding: $o-attachment-margin;
+
+    @include media-breakpoint-up(md) {
+        width: 50%;
+    }
+    @include media-breakpoint-up(lg) {
+        width: 25%;
+    }
+
+    &.o_attachment_many2many {
+        @include media-breakpoint-up(md) {
+            width: 50%;
+        }
+        @include media-breakpoint-up(lg) {
+            width: 62%;
+        }
+    }
+
+    &.o_attachment_editable {
+        .o_attachment_wrap {
+            padding-right: 5px;
+            width: 100%;
+        }
+    }
+}
+
+.o_attachment_wrap {
+    display: flex;
+    padding-right: unset;
+
+    .o_image_box {
+        .m2m-image-container {
+            width: 100px !important;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
+
+.widget-image {
+    height: 50px;
+    object-fit: scale-down;
+    cursor: pointer;
+}
+
+.o_attachment_download {
+    background: #818181;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    transform: translateX(200%);
+    transition: all 0.3s ease 0s;
+    position: absolute;
+    top: 0;
+    right: 45px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+
+    &:hover {
+        background: #71639e;
+    }
+}
+
+.modal-img {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+
+    img {
+        width: auto;
+        height: auto;
+        max-width: 70%;
+        max-height: 70%;
+        margin: auto;
+        display: block;
+    }
+
+    .row {
+        padding: 0 40px;
+    }
+}
