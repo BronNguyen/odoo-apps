@@ -7,7 +7,7 @@ import { useService } from "@web/core/utils/hooks";
 import { useState, onWillUpdateProps } from "@odoo/owl";
 
 export class MultipleAttachmentPreview extends Many2ManyBinaryField {
-    static template = "attachment_preview.MultipleAttachmentPreview";
+    static template = "draggable_m2m_attachment_preview.MultipleAttachmentPreview";
 
     setup() {
         super.setup();
@@ -370,4 +370,4 @@ export const multipleAttachmentPreview = {
     component: MultipleAttachmentPreview,
 };
 
-registry.category("fields").add("multiple_attachment_field", multipleAttachmentPreview);
+registry.category("fields").add("draggable_m2m_attachment_field", multipleAttachmentPreview);

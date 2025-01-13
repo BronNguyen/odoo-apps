@@ -10,11 +10,11 @@
     'depends': [],
     'assets': {
         'web.assets_backend': [
-            'attachment_preview/static/src/js/lib/pdf.min.js',
-            'attachment_preview/static/src/js/lib/pdf.worker.min.js',
-            'attachment_preview/static/src/js/many2many_binary_field.js',
-            'attachment_preview/static/src/scss/attachment_preview.scss',
-            'attachment_preview/static/src/xml/many2many_binary_field.xml',
+            'draggable_m2m_attachment_preview/static/src/js/lib/pdf.min.js',
+            'draggable_m2m_attachment_preview/static/src/js/lib/pdf.worker.min.js',
+            'draggable_m2m_attachment_preview/static/src/js/many2many_binary_field.js',
+            'draggable_m2m_attachment_preview/static/src/scss/attachment_preview.scss',
+            'draggable_m2m_attachment_preview/static/src/xml/many2many_binary_field.xml',
         ],
     },
     'images': [

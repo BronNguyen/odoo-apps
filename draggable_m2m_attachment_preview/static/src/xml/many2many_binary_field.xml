@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
 
-    <t t-name="attachment_preview.MultipleAttachmentPreview" owl="1">
+    <t t-name="draggable_m2m_attachment_preview.MultipleAttachmentPreview" owl="1">
         <div t-attf-class="oe_fileupload {{props.className ? props.className : ''}}" aria-atomic="true">
             <div class="o_attachments">
                 <t t-foreach="state.files" t-as="file" t-key="file_index">
@@ -37,7 +37,7 @@
                             <img t-attf-src="/web/static/img/mimetypes/pdf.svg" t-att-data-id="file.id" class="widget-image" />
                         </t>
                         <t t-else="">
-                            <img t-attf-src="/attachment_preview/static/description/file.png" t-att-data-id="file.id" class="widget-image" />
+                            <img t-attf-src="/draggable_m2m_attachment_preview/static/description/file.png" t-att-data-id="file.id" class="widget-image" />
                         </t>
                     </div>
                 </div>
