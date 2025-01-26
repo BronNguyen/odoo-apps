@@ -1,0 +1,21 @@
+.pw-input-container {
+    position: relative;
+    display: inline-block;
+
+    input {
+        padding-right: 40px; // Space for the icon
+    }
+
+    .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #888;
+
+        &:hover {
+            color: #555;
+        }
+    }
+}
