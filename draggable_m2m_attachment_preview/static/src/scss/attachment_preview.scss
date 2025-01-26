@@ -46,7 +46,7 @@
 .o_attachment {
     position: relative;
     width: 100%;
-    padding: $o-attachment-margin;
+    // padding: $o-attachment-margin;
 
     @include media-breakpoint-up(md) {
         width: 50%;
