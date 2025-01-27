@@ -13,6 +13,7 @@
     'depends': ['base'],
     'assets': {
         'web.assets_backend': [
+            'password_show_hide_confirm/static/src/js/record.js',
             'password_show_hide_confirm/static/src/js/password_show_hide.js',
             'password_show_hide_confirm/static/src/xml/password_show_hide.xml',
             'password_show_hide_confirm/static/src/scss/styles.scss',

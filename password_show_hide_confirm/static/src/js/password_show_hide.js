@@ -19,7 +19,11 @@ class PasswordShowHide extends CharField {
             passwordConfirmed: true,
         });
 
-        this.env.model.hooks.onWillSaveRecord = this.checkPasswordConfirmation.bind(this);
+        if (this.props.confirmPasswordTo) {
+            this.env.model.root.beforeSave = this.checkPasswordConfirmation.bind(this);
+        }
+
+        this.passwordConfirmed = true;
 
         useEffect(
             (ref) => {
@@ -28,27 +32,6 @@ class PasswordShowHide extends CharField {
                 ref.el.type = "password";
             },
             () => [this.input]
-        );
-
-        useEffect(
-            (fieldName) => {
-                if (!fieldName) return;
-                const checkPasswordConfirmation = function () {
-                    const value = this.props.value;
-                    const data = this.env.model.root.data[fieldName];
-                    if (value && value === data) {
-                        this.state.passwordConfirmed = true;
-                        return;
-                    }
-
-                    this.state.passwordConfirmed = false;
-                    this.env.model.root._setInvalidField(fieldName);
-                    this.env.model.root._setInvalidField(this.props.name);
-                };
-
-                this.checkPasswordConfirmation = checkPasswordConfirmation;
-            },
-            () => [this.props.confirmPasswordTo]
         );
     }
 
@@ -69,13 +52,34 @@ class PasswordShowHide extends CharField {
         this.state.isPassword = true;
     }
 
-    handleOnchangeInput(ev) {
-        this.checkPasswordConfirmation();
+    checkPasswordConfirmation() {
+        this.state.passwordConfirmed = this.passwordConfirmed;
+        const fieldName = this.props.confirmPasswordTo;
+        if (this.passwordConfirmed) {
+            this.env.model.root._invalidFields?.clear();
+            return true;
+        }
+        this.env.model.root._invalidFields.add(this.props.name).add(fieldName);
+        this.input.el.value = "";
+        return false;
     }
 
-    checkPasswordConfirmation() {
-        //mock function
-        return;
+    onPasswordInput() {
+        this.state.passwordConfirmed = true;
+        if (!this.props.confirmPasswordTo) return;
+
+        this.env.model.root._invalidFields?.clear();
+        this.env.model.root.clearInvalidPasswordFields();
+        const { value } = this.input.el;
+        const fieldName = this.props.confirmPasswordTo;
+        const data = this.env.model.root.data[fieldName];
+        if ((value && value === data) || (!value && !data)) {
+            this.passwordConfirmed = true;
+            return;
+        }
+
+        this.passwordConfirmed = false;
+        this.env.model.root.setInvalidPasswordFields([fieldName, this.props.name]);
     }
 }
 
