@@ -1,21 +1,31 @@
-.pw-input-container {
-    position: relative;
-    display: inline-block;
-
-    input {
-        padding-right: 40px; // Space for the icon
+.o_field_password_show_hide_confirm {
+    .password-warning {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+        position: absolute;
+        transform: translate(-14px, -20px);
     }
 
-    .toggle-password {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #888;
+    .pw-input-container {
+        position: relative;
+        display: inline-block;
 
-        &:hover {
-            color: #555;
+        input {
+            padding-right: 40px; // Space for the icon
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+
+            &:hover {
+                color: #555;
+            }
         }
     }
 }
