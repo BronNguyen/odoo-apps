@@ -20,6 +20,7 @@ class PasswordShowHide extends CharField {
         });
 
         if (this.props.confirmPasswordTo) {
+            this.env.model.root.confirmPasswordField = this;
             this.env.model.root.beforeSave = this.checkPasswordConfirmation.bind(this);
         }
 
@@ -53,6 +54,7 @@ class PasswordShowHide extends CharField {
     }
 
     checkPasswordConfirmation() {
+        debugger;
         this.state.passwordConfirmed = this.passwordConfirmed;
         const fieldName = this.props.confirmPasswordTo;
         if (this.passwordConfirmed) {
@@ -66,7 +68,25 @@ class PasswordShowHide extends CharField {
 
     onPasswordInput() {
         this.state.passwordConfirmed = true;
-        if (!this.props.confirmPasswordTo) return;
+        if (!this.props.confirmPasswordTo) {
+            const { confirmPasswordField } = this.env.model.root;
+            if (!confirmPasswordField) return;
+
+            const { value } = this.input.el;
+            const data = confirmPasswordField.input.el.value;
+            if ((value && value === data) || (!value && !data)) {
+                this.passwordConfirmed = true;
+                confirmPasswordField.passwordConfirmed = true;
+                return;
+            }
+            this.passwordConfirmed = false;
+            confirmPasswordField.passwordConfirmed = false;
+            this.env.model.root.setInvalidPasswordFields([
+                confirmPasswordField.props.name,
+                this.props.name,
+            ]);
+            return;
+        }
 
         this.env.model.root._invalidFields?.clear();
         this.env.model.root.clearInvalidPasswordFields();
@@ -78,7 +98,6 @@ class PasswordShowHide extends CharField {
             return;
         }
 
-        this.passwordConfirmed = false;
         this.env.model.root.setInvalidPasswordFields([fieldName, this.props.name]);
     }
 }
