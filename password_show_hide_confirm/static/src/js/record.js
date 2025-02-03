@@ -20,12 +20,12 @@ patch(Record.prototype, {
         this.invalidPasswordFields = [];
     },
 
-    beforeSave() {
+    allowSave() {
         return true;
     },
 
     async save(options) {
-        if (!this.beforeSave()) return;
+        if (!this.allowSave()) return;
 
         return await super.save(options);
     },

@@ -21,7 +21,7 @@ class PasswordShowHide extends CharField {
 
         if (this.props.confirmPasswordTo) {
             this.env.model.root.confirmPasswordField = this;
-            this.env.model.root.beforeSave = this.checkPasswordConfirmation.bind(this);
+            this.env.model.root.allowSave = this.checkPasswordConfirmation.bind(this);
         }
 
         this.passwordConfirmed = true;
