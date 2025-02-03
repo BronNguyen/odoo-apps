@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Password Show/Hide Confirm Widget Description</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+
+            h1 {
+                color: #333;
+            }
+
+            .description {
+                margin-top: 20px;
+            }
+
+            .steps {
+                margin-top: 20px;
+            }
+
+            .steps ol {
+                margin-left: 20px;
+            }
+
+            .highlight {
+                color: #0066cc;
+                font-weight: bold;
+            }
+
+            .note {
+                background-color: #f9f9f9;
+                border-left: 5px solid #ffcc00;
+                padding: 10px;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Password Show/Hide Confirm Widget for Odoo</h1>
+
+        <div class="description">
+            <p>
+                This Password Show/Hide Confirm widget is designed for use in your Odoo application. It
+                allows users to toggle the visibility of password fields and ensures that the confirm password
+                field matches the password field. The widget enhances user experience by providing a simple
+                way to verify and manage passwords.
+            </p>
+            <p>
+                The widget is linked to a
+                <span class="highlight">password field</span>
+                with the widget property set to
+                <span class="highlight">password_show_hide_confirm</span>.
+            </p>
+            <code>
+                <field name="password" widget="password_show_hide_confirm" />
+                <field name="confirm_password" widget="password_show_hide_confirm" confirm_password_to="password" />
+            </code>
+        </div>
+
+        <div class="steps">
+            <h2>How the Password Show/Hide Confirm Widget Works:</h2>
+            <ol>
+                <li>
+                    Define a password field in your Odoo model.
+                </li>
+                <li>
+                    Add the attribute <code>widget="password_show_hide_confirm"</code> to the
+                    password field in your form view.
+                </li>
+                <li>
+                    Define a confirm password field in your Odoo model.
+                </li>
+                <li>
+                    Add the attribute <code>widget="password_show_hide_confirm" confirm_password_to="password"</code> to the
+                    confirm password field in your form view.
+                </li>
+            </ol>
+        </div>
+    </body>
+</html>

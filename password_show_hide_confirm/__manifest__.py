@@ -2,10 +2,13 @@
 {
     'name': "Password Show/Hide Confirm",
     'summary': """
-    Adds show/hide functionality to password fields with confirmation
+    Adds functionality to show or hide password fields with confirmation
     """,
     'description': """
-    Long description of module's purpose
+    This module enhances password fields by adding a show/hide toggle feature.
+    It allows users to view or hide their password input, improving usability
+    and reducing input errors. The module also includes a confirmation mechanism
+    to ensure the password is entered correctly.
     """,
     'author': "Bron",
     'category': 'Tools',
@@ -19,6 +22,9 @@
             'password_show_hide_confirm/static/src/scss/styles.scss',
         ],
     },
+    'images': [
+        'static/description/banner.png',
+    ],
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
