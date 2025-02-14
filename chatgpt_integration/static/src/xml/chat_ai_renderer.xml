@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ChatAIRenderer">
+        <div class="chat_ai_container">
+            <div class="history_section" t-ref="container-ref">
+                <t t-set="i" t-value="0"/>
+                <t t-foreach="state.chat_history" t-as="line" t-key="++i">
+                    <t t-if="line.is_user">
+                        <div class="chat-ai-user">
+                            <t t-out="markupMessage(line.message)"/>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="chat-ai-bot">
+                            <t t-out="markupMessage(line.message)"/>
+                        </div>
+                    </t>
+                </t>
+            </div>
+            <div class="answer_response_section">
+                <div class="chat-bot-response">
+                    <t t-out="markupMessage(state.answer_response)"/>
+                </div>
+            </div>
+            <div class="chat_input_section">
+                <input type="text" class="chat_input" t-att-placeholder="placeholder" t-ref="chat_input_ref"/>
+                <button class="chat_send_button" t-att-disabled="state.is_blocked" t-on-click="onSendQuestion">Send</button>
+            </div>
+        </div>
+    </t>
+
+</templates>

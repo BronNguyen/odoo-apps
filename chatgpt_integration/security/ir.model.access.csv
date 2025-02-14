@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_chat_user,access_ai_chat_user,model_ai_chat,base.group_user,1,0,1,0
+access_ai_chat_manager,access_ai_chat_manager,model_ai_chat,base.group_system,1,1,1,1
+access_ai_chat_history_user,access_ai_chat_history_user,model_ai_chat_history,base.group_user,1,0,1,0
+access_ai_chat_history_manager,access_ai_chat_history_manager,model_ai_chat_history,base.group_system,1,1,1,1

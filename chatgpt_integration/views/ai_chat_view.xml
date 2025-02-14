@@ -1,0 +1,38 @@
+<odoo>
+    <record id="view_ai_chat_form" model="ir.ui.view">
+        <field name="name">ai.chat.form</field>
+        <field name="model">ai.chat</field>
+        <field name="arch" type="xml">
+            <form string="AI Chat" js_class="chat_ai">
+                <sheet>
+                    <header>
+                        <button name="action_generate_ai_response" type="object" string="Ask AI" class="oe_highlight"/>
+                    </header>
+                    <group>
+                        <field name="name"/>
+                        <field name="text_question"/>
+                        <field name="ai_model"/>
+                        <field name="text_response"/>
+                        <field name="chat_history_ids" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_chat_list" model="ir.ui.view">
+        <field name="name">ai.chat.list</field>
+        <field name="model">ai.chat</field>
+        <field name="arch" type="xml">
+            <tree string="AI Chat">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_ai_chat" model="ir.actions.act_window">
+        <field name="name">AI Chat</field>
+        <field name="res_model">ai.chat</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
