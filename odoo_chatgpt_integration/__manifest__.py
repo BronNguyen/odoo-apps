@@ -28,6 +28,9 @@
             'odoo_chatgpt_integration/static/src/js/chat_ai.js',
         ],
     },
+    'images': [
+        'static/description/banner.jpg',
+    ],
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
