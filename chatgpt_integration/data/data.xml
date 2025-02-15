@@ -20,13 +20,13 @@
             <field name="value">wss://api.openai.com/v1/realtime</field>
         </record>
 
-        <record id="openai_organization" model="ir.config_parameter">
-            <field name="key">openai_organization</field>
+        <record id="chatgpt.organization_id" model="ir.config_parameter">
+            <field name="key">chatgpt.organization_id</field>
             <field name="value">organization id</field>
         </record>
 
-        <record id="openai_project" model="ir.config_parameter">
-            <field name="key">openai_project</field>
+        <record id="chatgpt.project_id" model="ir.config_parameter">
+            <field name="key">chatgpt.project_id</field>
             <field name="value">project id</field>
         </record>
 

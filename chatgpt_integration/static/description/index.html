@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chat GPT Integration</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+
+            h1 {
+                color: #333;
+            }
+
+            .description {
+                margin-top: 20px;
+            }
+
+            .steps {
+                margin-top: 20px;
+            }
+
+            .steps ol {
+                margin-left: 20px;
+            }
+
+            .highlight {
+                color: #0066cc;
+                font-weight: bold;
+            }
+
+            .note {
+                background-color: #f9f9f9;
+                border-left: 5px solid #ffcc00;
+                padding: 10px;
+                margin-top: 20px;
+            }
+
+            .link {
+                color: #0066cc;
+                text-decoration: none;
+            }
+
+            .link:hover {
+                text-decoration: underline;
+            }
+
+            .code {
+                background-color: #f4f4f4;
+                border-radius: 5px;
+                padding: 5px;
+                font-family: "Courier New", monospace;
+                display: inline-block;
+            }
+
+            .example {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .example img {
+                max-width: 100%;
+                height: auto;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Odoo Chat GPT Integration</h1>
+
+        <div class="description">
+            <h2>ChatGPT Integration for Odoo</h2>
+            <p>
+                This module integrates ChatGPT with Odoo. To use this integration, you need to set
+                up the following parameters in the Odoo system parameters (ir.config_parameter):
+            </p>
+            <ul>
+                <li><span class="highlight">openai.api_key</span>: Your ChatGPT API key.</li>
+                <li>
+                    <span class="highlight">openai.organization_id</span>: Your ChatGPT
+                    organization ID.
+                </li>
+                <li><span class="highlight">openai.project_id</span>: Your ChatGPT project ID.</li>
+            </ul>
+            <p>These parameters are required for the module to function correctly.</p>
+            <img src="system_parameters.png" alt="ChatGPT Integration in Odoo" />
+
+            <div class="steps">
+                <h3>How to Get Your ChatGPT API Key, Organization ID, and Project ID</h3>
+                <ol>
+                    <li>
+                        Go to the
+                        <a class="link" href="https://platform.openai.com" target="_blank"
+                            >OpenAI Platform</a
+                        >
+                        and log in with your account.
+                    </li>
+                    <li>
+                        Navigate to the <span class="highlight">API Keys</span> section in the
+                        dashboard.
+                    </li>
+                    <li>
+                        Click on <span class="highlight">Create new secret key</span> to generate
+                        your <span class="highlight">API key</span>. Copy and save it securely as
+                        you won't be able to view it again.
+                    </li>
+                    <li>
+                        In the same dashboard, go to the
+                        <span class="highlight">Organization</span> section to find your
+                        <span class="highlight">Organization ID</span>.
+                    </li>
+                    <li>
+                        For the <span class="highlight">Project ID</span>, navigate to the
+                        <span class="highlight">Projects</span> section and select the relevant
+                        project. The <span class="highlight">Project ID</span> will be displayed on
+                        the project details page.
+                    </li>
+                </ol>
+            </div>
+
+            <div class="steps">
+                <h3>Installing OpenAI Python Package</h3>
+                <p>
+                    To interact with the ChatGPT API in your Odoo module, you need to install the
+                    OpenAI Python package. Use the following command:
+                </p>
+                <pre class="code">pip install openai</pre>
+                <p>If you're using Odoo's virtual environment, make sure to activate it first:</p>
+                <pre class="code">
+                    source path/to/odoo/env/bin/activate
+                </pre>
+                <p>Then, install the package:</p>
+                <pre class="code">pip install openai</pre>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> Make sure to add the OpenAI package to your requirements.txt
+                file if you are deploying your Odoo instance in a production environment.
+            </div>
+
+            <div class="example">
+                <h3>Example of the Module</h3>
+                <img src="example.png" alt="Example of ChatGPT Integration Module" />
+            </div>
+        </div>
+    </body>
+</html>

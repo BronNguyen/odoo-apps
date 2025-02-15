@@ -3,10 +3,18 @@
     'name': 'ChatGPT Integration',
     'version': '17.0',
     'summary': 'Integrate ChatGPT with Odoo',
-    'description': 'Module to integrate ChatGPT with Odoo for AI-powered chat functionality',
+    'description': '''
+    This module integrates ChatGPT with Odoo. To use this integration, you need to set up the following parameters in the Odoo system parameters (ir.config_parameter):
+
+    1. `openai.api_key`: Your ChatGPT API key.
+    2. `chatgpt.organization_id`: Your ChatGPT organization ID.
+    3. `chatgpt.project_id`: Your ChatGPT project ID.
+
+    These parameters are required for the module to function correctly.
+    ''',
     'author': 'Bron',
     'category': 'Tools',
-    'depends': ['web', 'tools'],  # Ensure 'web' is included as it is required for JS assets
+    'depends': ['web'],
     'data': [
         'security/ir.model.access.csv',
         'views/ai_chat_view.xml',
