@@ -1,0 +1,5 @@
+<odoo>
+    <data>
+        <menuitem id="menu_chatgpt" name="ChatGPT" action="action_ai_chat" sequence="10" web_icon="odoo_chatgpt_integration,static/description/icon.png"/>
+    </data>
+</odoo>

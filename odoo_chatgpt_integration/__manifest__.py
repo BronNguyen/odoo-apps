@@ -23,9 +23,9 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'chatgpt_integration/static/src/scss/chat_ai.scss',
-            'chatgpt_integration/static/src/xml/chat_ai_renderer.xml',
-            'chatgpt_integration/static/src/js/chat_ai.js',
+            'odoo_chatgpt_integration/static/src/scss/chat_ai.scss',
+            'odoo_chatgpt_integration/static/src/xml/chat_ai_renderer.xml',
+            'odoo_chatgpt_integration/static/src/js/chat_ai.js',
         ],
     },
     'installable': True,
