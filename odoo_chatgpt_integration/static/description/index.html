@@ -76,21 +76,16 @@
             <h2>ChatGPT Integration for Odoo</h2>
             <p>
                 This module integrates ChatGPT with Odoo. To use this integration, you need to set
-                up the following parameters in the Odoo system parameters (ir.config_parameter):
+                up the following parameter in the Odoo system parameters (ir.config_parameter):
             </p>
             <ul>
                 <li><span class="highlight">openai.api_key</span>: Your ChatGPT API key.</li>
-                <li>
-                    <span class="highlight">openai.organization_id</span>: Your ChatGPT
-                    organization ID.
-                </li>
-                <li><span class="highlight">openai.project_id</span>: Your ChatGPT project ID.</li>
             </ul>
-            <p>These parameters are required for the module to function correctly.</p>
+            <p>This parameter is required for the module to function correctly.</p>
             <img src="system_parameters.png" alt="ChatGPT Integration in Odoo" />
 
             <div class="steps">
-                <h3>How to Get Your ChatGPT API Key, Organization ID, and Project ID</h3>
+                <h3>How to Get Your ChatGPT API Key</h3>
                 <ol>
                     <li>
                         Go to the
@@ -107,17 +102,6 @@
                         Click on <span class="highlight">Create new secret key</span> to generate
                         your <span class="highlight">API key</span>. Copy and save it securely as
                         you won't be able to view it again.
-                    </li>
-                    <li>
-                        In the same dashboard, go to the
-                        <span class="highlight">Organization</span> section to find your
-                        <span class="highlight">Organization ID</span>.
-                    </li>
-                    <li>
-                        For the <span class="highlight">Project ID</span>, navigate to the
-                        <span class="highlight">Projects</span> section and select the relevant
-                        project. The <span class="highlight">Project ID</span> will be displayed on
-                        the project details page.
                     </li>
                 </ol>
             </div>
@@ -145,6 +129,10 @@
             <div class="example">
                 <h3>Example of the Module</h3>
                 <img src="example.png" alt="Example of ChatGPT Integration Module" />
+                <form>
+                    <label for="imageUpload">Upload an image:</label>
+                    <input type="file" id="imageUpload" name="imageUpload" accept="image/*" />
+                </form>
             </div>
         </div>
     </body>

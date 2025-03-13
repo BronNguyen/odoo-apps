@@ -37,15 +37,12 @@ class ChatBotController(http.Controller):
             }
 
     @http.route('/chatbot/ws_information', type='json', auth='public', csrf=False)
-    def get_chatbot_api_url(self, **kw):
+    def get_ws_information(self, **kw):
         url = request.env['ir.config_parameter'].sudo().get_param('web_websocket_url')
         api_key = request.env['ir.config_parameter'].sudo().get_param('openai.api_key')
         openai_organization = request.env['ir.config_parameter'].sudo().get_param('openai_organization')
-        print('openai_organization: ', openai_organization)
         openai_project = request.env['ir.config_parameter'].sudo().get_param('openai_project')
-        print('openai_project: ', openai_project)
         beta_protocol = request.env['ir.config_parameter'].sudo().get_param('openai_beta_protocol')
-        print('beta_protocol: ', beta_protocol)
         ai_model = request.env['ai.chat'].get_default_model()
 
         api_url = f'{url}?model={ai_model}'
@@ -56,4 +53,16 @@ class ChatBotController(http.Controller):
             'openai_organization': openai_organization,
             'openai_project': openai_project,
             'beta_protocol': beta_protocol
+        }
+
+    @http.route('/chatbot/http_information', type='json', auth='public', csrf=False)
+    def get_http_information(self, **kw):
+        api_url = request.env['ir.config_parameter'].sudo().get_param('openai_completion_url')
+        api_key = request.env['ir.config_parameter'].sudo().get_param('openai.api_key')
+        openai_model = request.env['ir.config_parameter'].sudo().get_param('openai_model')
+
+        return {
+            'api_key': api_key,
+            'openai_model': openai_model,
+            'api_url': api_url,
         }

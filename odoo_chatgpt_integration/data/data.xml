@@ -34,5 +34,20 @@
             <field name="key">openai_beta_protocol</field>
             <field name="value">openai-beta.realtime-v1</field>
         </record>
+
+        <record id="openai_completion_url" model="ir.config_parameter">
+            <field name="key">openai_completion_url</field>
+            <field name="value">https://api.openai.com/v1/chat/completions</field>
+        </record>
+
+        <record id="openai_model" model="ir.config_parameter">
+            <field name="key">openai_model</field>
+            <field name="value">gpt-4o</field>
+        </record>
+
+        <record id="openai_connection" model="ir.config_parameter">
+            <field name="key">openai_connection</field>
+            <field name="value">http</field>
+        </record>
     </data>
 </odoo>

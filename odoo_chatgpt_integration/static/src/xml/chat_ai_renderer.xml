@@ -24,9 +24,18 @@
                 </div>
             </div>
             <div class="chat_input_section">
-                <input type="text" class="chat_input" t-att-placeholder="placeholder" t-ref="chat_input_ref"/>
+                <button class="file_upload_button" t-on-click="onFileUploadClick">
+                    <i class="fa fa-paperclip"></i>                    <!-- Font Awesome Icon -->
+                    <input type="file" class="file_input" t-ref="file_input_ref" style="display: none;" t-on-change="onFileChange"/>
+                </button>
+                <div class="chat_input_wrapper" t-att-style="state.imageThumbnail and 'padding-left: 50px;'">
+                    <div contenteditable="true" class="chat_input" t-ref="chat_input_ref" t-on-paste="onPasteImage"></div>
+                    <img class="chat_input_thumbnail" t-att-src="state.imageThumbnail" t-att-style="`display: ${state.imageThumbnail ? 'block' : 'none'}`"/>
+                    <div t-if="state.imageThumbnail" class="close-thumbnail" t-on-click="onRemoveImage">X</div>
+                </div>
                 <button class="chat_send_button" t-att-disabled="state.is_blocked" t-on-click="onSendQuestion">Send</button>
             </div>
+
         </div>
     </t>
 
