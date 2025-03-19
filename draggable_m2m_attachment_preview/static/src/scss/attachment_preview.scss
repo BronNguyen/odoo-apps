@@ -15,7 +15,12 @@
 }
 
 .o_draggable_m2m_attachment_field_cell {
-    min-width: 300px !important;
+    min-width: 250px !important;
+    .o_attachment {
+        .o_attachment_wrap {
+            width: 100%;
+        }
+    }
 }
 
 .o_data_cell {
