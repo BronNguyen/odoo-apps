@@ -9,10 +9,20 @@
         width: unset !important;
     }
 }
-
 .o_attachments {
     display: grid;
     grid-template-columns: auto auto;
+}
+
+.o_draggable_m2m_attachment_field_cell {
+    min-width: 300px !important;
+}
+
+.o_data_cell {
+    .o_attachments {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .o_attachment {
@@ -46,7 +56,7 @@
 .o_attachment {
     position: relative;
     width: 100%;
-    // padding: $o-attachment-margin;
+    padding: $o-attachment-margin;
 
     @include media-breakpoint-up(md) {
         width: 50%;

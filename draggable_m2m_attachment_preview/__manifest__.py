@@ -7,7 +7,7 @@
     'description': """User can preview a document without downloading.""",
     'author': 'Bron',
     'license': 'LGPL-3',
-    'depends': [],
+    'depends': ['web'],
     'assets': {
         'web.assets_backend': [
             'draggable_m2m_attachment_preview/static/src/js/lib/pdf.min.js',

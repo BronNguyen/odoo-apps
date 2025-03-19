@@ -79,10 +79,15 @@ export class MultipleAttachmentPreview extends Many2ManyBinaryField {
     }
 
     async getFilesValue() {
-        if (this.env.model.root.resId === false) return [];
+        const singleResId = this.env.model?.root?.resId;
+        const batchResId = this.props.record?.resId;
+
+        if (singleResId === false) return [];
+
+        const resId = singleResId === undefined ? batchResId : singleResId;
 
         const files = await this.orm.call("ir.attachment", "search_read", [
-            [["res_id", "=", this.env.model.root.resId]],
+            [["res_id", "=", resId]],
         ]);
 
         this.state.files = files.filter((file) => this.fileIds.includes(file.id));
