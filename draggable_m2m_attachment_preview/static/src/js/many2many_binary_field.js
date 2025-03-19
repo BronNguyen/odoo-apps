@@ -78,16 +78,17 @@ export class MultipleAttachmentPreview extends Many2ManyBinaryField {
         document.body.removeChild(anchorEl);
     }
 
-    async getFilesValue() {
+    get resId() {
         const singleResId = this.env.model?.root?.resId;
         const batchResId = this.props.record?.resId;
+        return singleResId || batchResId;
+    }
 
-        if (singleResId === false) return [];
-
-        const resId = singleResId === undefined ? batchResId : singleResId;
+    async getFilesValue() {
+        if (!this.resId) return [];
 
         const files = await this.orm.call("ir.attachment", "search_read", [
-            [["res_id", "=", resId]],
+            [["res_id", "=", this.resId]],
         ]);
 
         this.state.files = files.filter((file) => this.fileIds.includes(file.id));
@@ -350,12 +351,13 @@ export class MultipleAttachmentPreview extends Many2ManyBinaryField {
     }
 
     async uploadFiles(files) {
-        const { resId, resModel } = this.env.model.root;
+        const { resModel } = this.env.model.root;
+
         const params = {
             csrf_token: odoo.csrf_token,
             ufile: Array.from(files),
             model: resModel,
-            id: resId || 0,
+            id: this.resId || 0,
         };
 
         const fileSize = files[0]?.size;
