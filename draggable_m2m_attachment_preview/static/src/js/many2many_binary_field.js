@@ -79,9 +79,7 @@ export class MultipleAttachmentPreview extends Many2ManyBinaryField {
     }
 
     get resId() {
-        const singleResId = this.env.model?.root?.resId;
-        const batchResId = this.props.record?.resId;
-        return singleResId || batchResId;
+        return this.props.record?.resId;
     }
 
     async getFilesValue() {
