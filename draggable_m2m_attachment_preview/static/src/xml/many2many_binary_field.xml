@@ -12,7 +12,7 @@
                 <div class="dropzone" t-on-dragover.prevent="handleDragOver" t-on-dragleave.prevent="handleDragLeave" t-on-drop="handleFileDrop" t-att-style="state.isDragging? 'border: 2px dashed #ccc; padding: 40px; text-align: center;': ''">
                     <p t-if="state.isDragging">Drag and drop files here <i class="fa fa-download"/>
                     </p>
-                    <FileInput acceptedFileExtensions="props.acceptedFileExtensions" multiUpload="true" onUpload.bind="onFileUploaded" resModel="props.record.resModel" resId="props.record.data.id or 0">
+                    <FileInput acceptedFileExtensions="props.acceptedFileExtensions" multiUpload="true" resModel="props.record.resModel" t-on-change="onFileInputChange" resId="props.record.data.id or 0">
                         <button class="btn btn-secondary o_attach" data-tooltip="Attach">
                             <span class="fa fa-paperclip" aria-label="Attach"/>
                             <t t-esc="props.uploadText"/>

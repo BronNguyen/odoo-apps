@@ -87,10 +87,10 @@ export class MultipleAttachmentPreview extends Many2ManyBinaryField {
     }
 
     async getFilesValue() {
-        if (!this.attachmentIds) return [];
+        if (!this.resId) return [];
 
         const files = await this.orm.call("ir.attachment", "search_read", [
-            [["id", "=", this.attachmentIds]],
+            [["res_id", "=", this.resId]],
         ]);
 
         this.state.files = files.filter((file) => this.fileIds.includes(file.id));
@@ -102,14 +102,47 @@ export class MultipleAttachmentPreview extends Many2ManyBinaryField {
         this.state.files = files;
     }
 
-    async handleFileDrop(event) {
+    handleFileDrop(event) {
         this.handleDragLeave(event);
-
         event.preventDefault();
         const files = event.dataTransfer.files;
+        this.uploadFiles(files);
+    }
+
+    handleClickUploadButton(filesArray) {
+        this.uploadFiles(filesArray);
+    }
+
+    async uploadFiles(files) {
+        if (!files.length) return;
+
+        const { resModel } = this.env.model.root;
+
+        const params = {
+            csrf_token: odoo.csrf_token,
+            ufile: Array.from(files),
+            model: resModel,
+            id: this.resId || 0,
+        };
+
+        const fileSize = files[0]?.size;
+        if (!checkFileSize(fileSize, this.notification)) return null;
+
+        const fileData = await this.http.post("/web/binary/upload_attachment", params, "text");
+        const parsedFileData = JSON.parse(fileData);
+        if (parsedFileData.error) {
+            throw new Error(parsedFileData.error);
+        }
+
+        await this.onFileUploaded(parsedFileData);
+    }
+
+    onFileInputChange(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        const files = event.target.files;
         if (files.length > 0) {
-            const result = await this.uploadFiles(files);
-            this.onFileUploaded(result);
+            this.uploadFiles(files);
         }
     }
 
@@ -350,27 +383,6 @@ export class MultipleAttachmentPreview extends Many2ManyBinaryField {
                 iframe.contentWindow.print();
             };
         }
-    }
-
-    async uploadFiles(files) {
-        const { resModel } = this.env.model.root;
-
-        const params = {
-            csrf_token: odoo.csrf_token,
-            ufile: Array.from(files),
-            model: resModel,
-            id: this.resId || 0,
-        };
-
-        const fileSize = files[0]?.size;
-        if (!checkFileSize(fileSize, this.notification)) return null;
-
-        const fileData = await this.http.post("/web/binary/upload_attachment", params, "text");
-        const parsedFileData = JSON.parse(fileData);
-        if (parsedFileData.error) {
-            throw new Error(parsedFileData.error);
-        }
-        return parsedFileData;
     }
 }
 
