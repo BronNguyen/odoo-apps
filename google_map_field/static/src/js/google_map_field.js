@@ -3,7 +3,6 @@
 
 import { registry } from "@web/core/registry";
 import { CharField } from "@web/views/fields/char/char_field";
-import { MapRenderer } from "@web_map/map_view/map_renderer";
 import { useService } from "@web/core/utils/hooks";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { loadGoogleMapLibWithApi } from "./google_api_services";
@@ -13,7 +12,7 @@ const { useRef, useEffect, useState, onMounted, onWillStart, onWillUnmount } = o
 
 export class GoogleMapField extends CharField {
     static template = "google_map_field.GoogleMapField";
-    static components = { ...CharField.components, MapRenderer };
+    static components = { ...CharField.components };
     static props = {
         ...standardFieldProps,
         autocomplete: { type: String, optional: true },
